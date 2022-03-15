@@ -31,7 +31,8 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
     private lateinit var brushColorDialogButton: ImageButton
     private lateinit var loadImageButton: ImageButton
     private lateinit var ivBackground: ImageView
-    val requestPermission: ActivityResultLauncher<Array<String>> = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
+    private lateinit var ibUndo: ImageView
+    private val requestPermission: ActivityResultLauncher<Array<String>> = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
         permissions.entries.forEach {
             val permissionName = it.key
             val isGranted = it.value
@@ -46,7 +47,7 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
             }
         }
     }
-    val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+    private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK && it.data != null) {
             Log.d("MyTag", "Data loading")
             ivBackground.setImageURI(it.data?.data)
@@ -62,6 +63,7 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
         brushColorDialogButton = findViewById(R.id.ibBrushColor)
         loadImageButton = findViewById(R.id.ibLoadImage)
         ivBackground = findViewById(R.id.iv_background)
+        ibUndo = findViewById(R.id.ibUndo)
 
         setPresenter(MainPresenter(this))
         presenter.onViewCreated()
@@ -69,6 +71,7 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
         brushSizeDialogButton.setOnClickListener { presenter.onBrushSizeButtonClicked() }
         brushColorDialogButton.setOnClickListener { presenter.onBrushColorButtonClicked() }
         loadImageButton.setOnClickListener { presenter.onLoadImageButtonClicked() }
+        ibUndo.setOnClickListener { presenter.onUndoButtonClicked() }
 
     }
 
@@ -111,6 +114,10 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
     override fun implementNewColor(newColor: Int) {
         brushColorDialogButton.setColorFilter(newColor)
         drawingView?.setColor(newColor)
+    }
+
+    override fun deleteLastPath() {
+        drawingView?.undoPath()
     }
 
     override fun checkPermissionAndNavigateToGallery() {

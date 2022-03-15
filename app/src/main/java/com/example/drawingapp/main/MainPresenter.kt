@@ -31,6 +31,10 @@ class MainPresenter(
         view?.checkPermissionAndNavigateToGallery()
     }
 
+    override fun onUndoButtonClicked() {
+        view?.deleteLastPath()
+    }
+
     override fun onDestroy() {
         this.view = null
     }
