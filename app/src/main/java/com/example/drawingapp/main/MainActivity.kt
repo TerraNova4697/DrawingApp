@@ -1,11 +1,14 @@
 package com.example.drawingapp.main
 
 import android.Manifest
-import android.content.DialogInterface
+import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,14 +18,9 @@ import com.example.drawingapp.R
 import com.example.drawingapp.selectbrushcolor.SelectBrushColorDialog
 import com.example.drawingapp.selectbrushsize.SelectBrushSizeFragment
 import com.example.drawingapp.views.DrawingView
-import com.skydoves.colorpickerview.ActionMode
 import com.skydoves.colorpickerview.ColorEnvelope
 import com.skydoves.colorpickerview.ColorPickerDialog
-import com.skydoves.colorpickerview.ColorPickerView
-import com.skydoves.colorpickerview.kotlin.colorPickerDialog
 import com.skydoves.colorpickerview.listeners.ColorEnvelopeListener
-import com.skydoves.colorpickerview.listeners.ColorPickerViewListener
-import com.skydoves.colorpickerview.preference.ColorPickerPreferenceManager
 
 class MainActivity : AppCompatActivity(), MainContract.View,
 SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.SelectBrushColorInterface{
@@ -32,18 +30,26 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
     private lateinit var brushSizeDialogButton: ImageButton
     private lateinit var brushColorDialogButton: ImageButton
     private lateinit var loadImageButton: ImageButton
+    private lateinit var ivBackground: ImageView
     val requestPermission: ActivityResultLauncher<Array<String>> = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
         permissions.entries.forEach {
             val permissionName = it.key
             val isGranted = it.value
 
             if (isGranted) {
-                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+                val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                openGalleryLauncher.launch(pickIntent)
             } else {
                 if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
                     Toast.makeText(this, "You denied permission", Toast.LENGTH_SHORT).show()
                 }
             }
+        }
+    }
+    val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK && it.data != null) {
+            Log.d("MyTag", "Data loading")
+            ivBackground.setImageURI(it.data?.data)
         }
     }
 
@@ -55,6 +61,7 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
         brushSizeDialogButton = findViewById(R.id.ibBrushSize)
         brushColorDialogButton = findViewById(R.id.ibBrushColor)
         loadImageButton = findViewById(R.id.ibLoadImage)
+        ivBackground = findViewById(R.id.iv_background)
 
         setPresenter(MainPresenter(this))
         presenter.onViewCreated()
@@ -72,10 +79,6 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
     override fun setBrushSize(size: Float) {
         drawingView?.setSizeForBrush(size)
     }
-
-//    fun setStrokeWidth(size: Float) {
-//        drawingView?.setStrokeWidth(size)
-//    }
 
     override fun navigateToSelectBrushSizeDialog() {
         val selectBrushSizeFragment = SelectBrushSizeFragment(this, drawingView?.getBrushSize() ?: 10f)

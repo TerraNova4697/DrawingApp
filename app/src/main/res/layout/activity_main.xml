@@ -12,6 +12,7 @@
         android:layout_height="0dp"
         android:layout_margin="5dp"
         android:padding="1dp"
+        android:background="@drawable/background_drawing_view_layout"
         app:layout_constraintBottom_toTopOf="@id/llOptionsButtons"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +29,6 @@
             android:id="@+id/drawing_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/background_drawing_view"
             />
 
     </FrameLayout>
