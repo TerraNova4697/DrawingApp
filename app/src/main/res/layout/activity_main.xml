@@ -6,16 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".main.MainActivity">
 
-    <com.example.drawingapp.views.DrawingView
-        android:id="@+id/drawing_view"
+    <FrameLayout
+        android:id="@+id/drawing_view_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_margin="5dp"
-        android:background="@drawable/background_drawing_view"
+        android:padding="1dp"
         app:layout_constraintBottom_toTopOf="@id/llOptionsButtons"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            />
+
+        <com.example.drawingapp.views.DrawingView
+            android:id="@+id/drawing_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/background_drawing_view"
+            />
+
+    </FrameLayout>
+
+
 
     <LinearLayout
         android:id="@+id/llOptionsButtons"
@@ -25,6 +43,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageButton
+            android:id="@+id/ibLoadImage"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_gallery"/>
 
         <ImageButton
             android:id="@+id/ibBrushSize"

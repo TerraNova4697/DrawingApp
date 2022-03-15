@@ -27,6 +27,10 @@ class MainPresenter(
         view?.implementNewColor(newColor)
     }
 
+    override fun onLoadImageButtonClicked() {
+        view?.checkPermissionAndNavigateToGallery()
+    }
+
     override fun onDestroy() {
         this.view = null
     }

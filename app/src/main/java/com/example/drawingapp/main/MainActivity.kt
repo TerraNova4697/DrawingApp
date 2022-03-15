@@ -1,10 +1,16 @@
 package com.example.drawingapp.main
 
+import android.Manifest
 import android.content.DialogInterface
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageButton
+import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import com.example.drawingapp.R
 import com.example.drawingapp.selectbrushcolor.SelectBrushColorDialog
 import com.example.drawingapp.selectbrushsize.SelectBrushSizeFragment
@@ -25,6 +31,21 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
     private var drawingView: DrawingView? = null
     private lateinit var brushSizeDialogButton: ImageButton
     private lateinit var brushColorDialogButton: ImageButton
+    private lateinit var loadImageButton: ImageButton
+    val requestPermission: ActivityResultLauncher<Array<String>> = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()){ permissions ->
+        permissions.entries.forEach {
+            val permissionName = it.key
+            val isGranted = it.value
+
+            if (isGranted) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show()
+            } else {
+                if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                    Toast.makeText(this, "You denied permission", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,12 +54,14 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
         drawingView = findViewById<DrawingView>(R.id.drawing_view)
         brushSizeDialogButton = findViewById(R.id.ibBrushSize)
         brushColorDialogButton = findViewById(R.id.ibBrushColor)
+        loadImageButton = findViewById(R.id.ibLoadImage)
 
         setPresenter(MainPresenter(this))
         presenter.onViewCreated()
 
-        brushSizeDialogButton.setOnClickListener { presenter.onBrushSizeButtonClicked()}
+        brushSizeDialogButton.setOnClickListener { presenter.onBrushSizeButtonClicked() }
         brushColorDialogButton.setOnClickListener { presenter.onBrushColorButtonClicked() }
+        loadImageButton.setOnClickListener { presenter.onLoadImageButtonClicked() }
 
     }
 
@@ -87,6 +110,10 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
         drawingView?.setColor(newColor)
     }
 
+    override fun checkPermissionAndNavigateToGallery() {
+        requestStoragePermission()
+    }
+
     override fun onDestroy() {
         presenter.onDestroy()
         super.onDestroy()
@@ -98,5 +125,27 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
 
     override fun onColorPicked(newColor: Int) {
         presenter.onColorPicked(newColor)
+    }
+
+    private fun requestStoragePermission() {
+        if(ActivityCompat.shouldShowRequestPermissionRationale(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        )) {
+            showRationaleDialog("DrawingApp", "DrawingApp needs to access your External Storage")
+        } else {
+            requestPermission.launch(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE))
+        }
+    }
+
+    private fun showRationaleDialog(title: String, message: String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Cancel") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
     }
 }

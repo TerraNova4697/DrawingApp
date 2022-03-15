@@ -9,6 +9,7 @@ class MainContract {
         fun onBrushSizeButtonClicked()
         fun onBrushColorButtonClicked()
         fun onColorPicked(newColor: Int)
+        fun onLoadImageButtonClicked()
     }
     interface View : BaseView<Presenter> {
         fun setBrushSize(size: Float)
@@ -16,5 +17,6 @@ class MainContract {
         fun setBrushColorForImageButton(color: Int)
         fun navigateToSelectBrushColorDialog()
         fun implementNewColor(newColor: Int)
+        fun checkPermissionAndNavigateToGallery()
     }
 }
