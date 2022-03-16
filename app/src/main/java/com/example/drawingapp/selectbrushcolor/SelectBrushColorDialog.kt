@@ -1,15 +1,10 @@
 package com.example.drawingapp.selectbrushcolor
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.drawingapp.R
 import com.example.drawingapp.databinding.FragmentDialogSelectBrushColorBinding
-import com.skydoves.colorpickerview.ColorPickerView
-import com.skydoves.colorpickerview.sliders.AlphaSlideBar
-import com.skydoves.colorpickerview.sliders.BrightnessSlideBar
 
 class SelectBrushColorDialog(
     private val listener: SelectBrushColorInterface,

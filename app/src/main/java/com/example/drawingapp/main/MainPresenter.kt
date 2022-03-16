@@ -1,7 +1,6 @@
 package com.example.drawingapp.main
 
 import android.graphics.Color
-import com.example.drawingapp.main.MainContract
 
 
 class MainPresenter(

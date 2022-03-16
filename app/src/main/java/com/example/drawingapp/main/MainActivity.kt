@@ -11,7 +11,6 @@ import android.media.MediaScannerConnection
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ImageButton
@@ -68,7 +67,6 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
     }
     private val openGalleryLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK && it.data != null) {
-            Log.d("MyTag", "Data loading")
             ivBackground.setImageURI(it.data?.data)
         }
     }
@@ -79,7 +77,7 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
         setContentView(R.layout.activity_main)
 
         flDrawingView = findViewById(R.id.drawing_view_container)
-        drawingView = findViewById<DrawingView>(R.id.drawing_view)
+        drawingView = findViewById(R.id.drawing_view)
         brushSizeDialogButton = findViewById(R.id.ibBrushSize)
         brushColorDialogButton = findViewById(R.id.ibBrushColor)
         loadImageButton = findViewById(R.id.ibLoadImage)
@@ -242,7 +240,7 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
     }
 
     private fun shareImage(result: String) {
-        MediaScannerConnection.scanFile(this, arrayOf(result), null) { path, uri ->
+        MediaScannerConnection.scanFile(this, arrayOf(result), null) { _, uri ->
             val shareIntent = Intent()
             shareIntent.action = Intent.ACTION_SEND
             shareIntent.putExtra(Intent.EXTRA_STREAM, uri)

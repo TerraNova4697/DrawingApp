@@ -1,9 +1,6 @@
 package com.example.drawingapp.selectbrushsize
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.widget.SeekBar
 import androidx.fragment.app.DialogFragment
@@ -49,11 +46,6 @@ class SelectBrushSizeFragment(
         binding.apply {
             seekBar.progress = currentBrushSize
             val brushSize = currentBrushSize
-//            val brushSize = TypedValue.applyDimension(
-//                TypedValue.COMPLEX_UNIT_DIP,
-//                currentBrushSize.toFloat(),
-//                resources.displayMetrics
-//            )
             val params = brush.layoutParams
             params.width = brushSize
             params.height = brushSize
