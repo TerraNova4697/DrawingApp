@@ -11,6 +11,7 @@ class MainContract {
         fun onColorPicked(newColor: Int)
         fun onLoadImageButtonClicked()
         fun onUndoButtonClicked()
+        fun onSaveImageClicked()
     }
     interface View : BaseView<Presenter> {
         fun setBrushSize(size: Float)
@@ -20,5 +21,6 @@ class MainContract {
         fun implementNewColor(newColor: Int)
         fun checkPermissionAndNavigateToGallery()
         fun deleteLastPath()
+        fun saveImageOnDevice()
     }
 }

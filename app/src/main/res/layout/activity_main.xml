@@ -51,6 +51,12 @@
             android:src="@drawable/ic_gallery"/>
 
         <ImageButton
+            android:id="@+id/ib_image_save"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_save"/>
+
+        <ImageButton
             android:id="@+id/ibBrushSize"
             android:layout_width="60dp"
             android:layout_height="60dp"

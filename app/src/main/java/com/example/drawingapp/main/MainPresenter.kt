@@ -35,6 +35,10 @@ class MainPresenter(
         view?.deleteLastPath()
     }
 
+    override fun onSaveImageClicked() {
+        view?.saveImageOnDevice()
+    }
+
     override fun onDestroy() {
         this.view = null
     }
