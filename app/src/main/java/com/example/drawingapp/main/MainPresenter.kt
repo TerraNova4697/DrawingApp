@@ -36,10 +36,15 @@ class MainPresenter(
     }
 
     override fun onSaveImageClicked() {
+        view?.showProgressDialog()
         view?.saveImageOnDevice()
     }
 
     override fun onDestroy() {
         this.view = null
+    }
+
+    override fun onImageSaved() {
+        view?.cancelProgressDialog()
     }
 }

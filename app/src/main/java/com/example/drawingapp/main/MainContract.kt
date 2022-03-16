@@ -12,6 +12,7 @@ class MainContract {
         fun onLoadImageButtonClicked()
         fun onUndoButtonClicked()
         fun onSaveImageClicked()
+        fun onImageSaved()
     }
     interface View : BaseView<Presenter> {
         fun setBrushSize(size: Float)
@@ -22,5 +23,7 @@ class MainContract {
         fun checkPermissionAndNavigateToGallery()
         fun deleteLastPath()
         fun saveImageOnDevice()
+        fun showProgressDialog()
+        fun cancelProgressDialog()
     }
 }
