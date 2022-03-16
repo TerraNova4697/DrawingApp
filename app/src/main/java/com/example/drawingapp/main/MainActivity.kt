@@ -54,13 +54,14 @@ SelectBrushSizeFragment.SelectBrushSizeDialogInterface, SelectBrushColorDialog.S
         permissions.entries.forEach {
             val permissionName = it.key
             val isGranted = it.value
-
-            if (isGranted) {
-                val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-                openGalleryLauncher.launch(pickIntent)
-            } else {
-                if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
-                    Toast.makeText(this, "You denied permission", Toast.LENGTH_SHORT).show()
+            if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                if (isGranted) {
+                    val pickIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    openGalleryLauncher.launch(pickIntent)
+                } else {
+                    if (permissionName == Manifest.permission.READ_EXTERNAL_STORAGE) {
+                        Toast.makeText(this, "You denied permission", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
